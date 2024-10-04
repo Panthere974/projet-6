@@ -36,7 +36,7 @@ function BookRatingForm({
       // eslint-disable-next-line no-underscore-dangle
       setBook({ ...update, id: update._id });
     } else {
-      alert(update);
+      alert('Veuillez choisir une note entre 1 et 5.');
     }
   };
   return (
