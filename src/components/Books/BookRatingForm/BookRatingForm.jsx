@@ -30,19 +30,19 @@ function BookRatingForm({
     if (!connectedUser || !auth) {
       navigate(APP_ROUTES.SIGN_IN);
     }
-    const update = await rateBook(id, userId, rating);
+    const update = !!rating && await rateBook(id, userId, rating);
     console.log(update);
     if (update) {
       // eslint-disable-next-line no-underscore-dangle
       setBook({ ...update, id: update._id });
     } else {
-      alert(update);
+      alert('Veuillez choisir une note entre 1 et 5.');
     }
   };
   return (
     <div className={styles.BookRatingForm}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <p>{rating > 0 ? 'Votre Note' : 'Notez cet ouvrage'}</p>
+        <p>{userRated ? 'Votre Note' : 'Notez cet ouvrage'}</p>
         <div className={styles.Stars}>
           {!userRated ? generateStarsInputs(rating, register) : displayStars(rating)}
         </div>
