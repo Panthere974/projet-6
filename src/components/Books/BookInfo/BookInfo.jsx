@@ -11,8 +11,8 @@ function BookInfo({ book }) {
       <p className={styles.PublishDate}>{book.year}</p>
       <p className={styles.Genre}>{book.genre}</p>
       <div className={styles.Rating}>
-        <div>{displayStars(book.averageRating)}</div>
-        <p>{`${book.averageRating}/5`}</p>
+        <div>{book.averageRating ? displayStars(book.averageRating) : 'Livre non noté'}</div>
+        <p>{!!book.averageRating && `${book.averageRating}/5`}</p>
       </div>
     </div>
   );
