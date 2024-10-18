@@ -2,6 +2,7 @@ import axios from 'axios';
 import { API_ROUTES } from '../utils/constants';
 
 function formatBooks(bookArray) {
+  console.log('bookArray:', bookArray);
   return bookArray.map((book) => {
     const newBook = { ...book };
     // eslint-disable-next-line no-underscore-dangle
@@ -67,13 +68,15 @@ export async function getBook(id) {
 
 export async function getBestRatedBooks() {
   try {
+    console.log('Requête envoyée vers:', API_ROUTES.BEST_RATED);
     const response = await axios({
       method: 'GET',
       url: `${API_ROUTES.BEST_RATED}`,
     });
+    console.log('Réponse reçue:', response.data); 
     return formatBooks(response.data);
   } catch (e) {
-    console.error(e);
+    console.error('Erreur dans getBestRatedBooks:', e);
     return [];
   }
 }
