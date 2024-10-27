@@ -9,11 +9,11 @@ router.get('/:id', booksController.getBookById);
 router.get('/bestrating', booksController.getBestrating);
 
 router.post('/', auth, multer, booksController.createBook);
-router.post('/:id/rating', booksController.addRate);
+router.post('/:id/rating', auth, booksController.addGrade);
 
 
-router.put('/:id', booksController.updateBook);
+router.put('/:id', auth, booksController.updateBook);
 
-router.delete('/:id', booksController.deleteBook);
+router.delete('/:id', auth, booksController.deleteBook);
 
 module.exports = router;
