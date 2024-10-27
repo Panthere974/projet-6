@@ -18,13 +18,15 @@ exports.getBestrating = (req, res) => {
     res.status(201).json({books});
 }
 
-exports.addBook = (req, res, next) => {
+exports.createBook = (req, res, next) => {
+    const bookData = JSON.parse(req.body.book);
     const book = new Book({
-        ...req.body.book
+        ...bookData,
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
-    book.imageUrl = req.body.image;
+    console.log(book);
     book.save()
-        .then(() => res.status(201).json({ message: 'Book registered successfully' }))
+        .then(() => res.status(201).json({ message: 'Book created successfully' }))
         .catch(error => res.status(400).json({ error }));
 }
 
