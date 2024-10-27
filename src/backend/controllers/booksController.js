@@ -1,6 +1,6 @@
 const Book = require('../models/book');
 
-exports.getBooks = (req, res) => {
+exports.getBooks = (req, res, next) => {
     Book.find()
         .then(books => res.status(200).json(books))
         .catch(error => res.status(400).json({ error }));
@@ -12,10 +12,14 @@ exports.getBookById = (req, res, next) => {
         .catch(error => res.status(404).json({ error }));
 }
 
-exports.getBestrating = (req, res) => {
-    const books= [];
-
-    res.status(201).json({books});
+exports.getBestRating = (req, res, next) => {
+    Book.find()
+        .then(books => {
+            books.sort((firstBook, secondBook) => secondBook.averageRating - firstBook.averageRating);
+            const bestRatingBooks = books.slice(0, 3);
+            res.status(200).json(bestRatingBooks);
+        })
+        .catch(error => res.status(400).json({ error }));
 }
 
 exports.createBook = (req, res, next) => {
@@ -58,7 +62,8 @@ exports.addGrade = (req, res, next) => {
                 return;
             }
             book.ratings.push({userId, grade: rating});
-            console.log(book);
+            const ratingSum = book.ratings.reduce((sum, rating) => sum + rating.grade, 0);
+            book.averageRating = ratingSum / book.ratings.length;
             book.save()
                 .then(() => res.status(200).json(book))
                 .catch(error => res.status(400).json({ error }));
