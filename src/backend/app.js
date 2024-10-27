@@ -1,6 +1,14 @@
+//sBtVdJHunGepzYJe
 const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
+mongoose.connect('mongodb+srv://Projet6:sBtVdJHunGepzYJe@projet6.9mqa16z.mongodb.net/?retryWrites=true&w=majority&appName=Projet6',
+    { useNewUrlParser: true,
+      useUnifiedTopology: true })
+    .then(() => console.log('Connexion à MongoDB réussie !'))
+    .catch(() => console.log('Connexion à MongoDB échouée !'));
 const authRoutes = require('./routes/authRoutes.js');
+const booksRoutes = require('./routes/booksRoutes.js');
 
 app.use(express.json());
 
@@ -12,5 +20,6 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/books', booksRoutes);
 
 module.exports = app;
