@@ -7,8 +7,8 @@ mongoose.connect('mongodb+srv://Projet6:sBtVdJHunGepzYJe@projet6.9mqa16z.mongodb
       useUnifiedTopology: true })
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée !'));
-const authRoutes = require('./routes/authRoutes.js');
-const booksRoutes = require('./routes/booksRoutes.js');
+const authRoutes = require('./routes/authRoutes');
+const booksRoutes = require('./routes/booksRoutes');
 
 app.use(express.json());
 
