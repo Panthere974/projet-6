@@ -63,7 +63,7 @@ exports.addGrade = (req, res, next) => {
             }
             book.ratings.push({userId, grade: rating});
             const ratingSum = book.ratings.reduce((sum, rating) => sum + rating.grade, 0);
-            book.averageRating = ratingSum / book.ratings.length;
+            book.averageRating =  Math.round(ratingSum / book.ratings.length * 10) / 10;
             book.save()
                 .then(() => res.status(200).json(book))
                 .catch(error => res.status(400).json({ error }));
