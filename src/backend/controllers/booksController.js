@@ -28,7 +28,6 @@ exports.createBook = (req, res, next) => {
         ...bookData,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
-    console.log(book);
     book.save()
         .then(() => res.status(201).json({ message: 'Book created successfully' }))
         .catch(error => res.status(400).json({ error }));
