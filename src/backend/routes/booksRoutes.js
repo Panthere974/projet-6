@@ -13,7 +13,7 @@ router.post('/', auth, uploadImage, booksController.createBook);
 router.post('/:id/rating', auth, booksController.addGrade);
 
 
-router.put('/:id', auth, uploadImage, booksController.updateBook, deleteImage);
+router.put('/:id', auth, uploadImage, deleteImage, booksController.updateBook);
 
 router.delete('/:id', auth, deleteImage, booksController.deleteBook);
 

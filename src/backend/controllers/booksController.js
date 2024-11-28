@@ -34,8 +34,16 @@ exports.createBook = (req, res, next) => {
 }
 
 exports.updateBook = (req, res, next) => {
-    Book.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })
-        .then(() => res.status(200).json({ message: 'Book updated successfully'}))
+    let imageUrl = null;
+    if (req.file) {
+        imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+    } else {
+        imageUrl = req.body.imageUrl
+    }
+    Book.updateOne({ _id: req.params.id }, { ...req.body, imageUrl: imageUrl, _id: req.params.id })
+        .then(() => {
+            res.status(200).json({ message: 'Book updated successfully'})
+        })
         .catch(error => res.status(400).json({ error }));
 }
 

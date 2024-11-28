@@ -7,7 +7,6 @@ const IMAGE_DIR = "./images";
 
 if (!fs.existsSync(IMAGE_DIR)) {
   fs.mkdirSync(IMAGE_DIR, { recursive: true });
-  console.log("Dossier 'images' créé");
 }
 
 const storage = multer.memoryStorage();
@@ -23,7 +22,7 @@ module.exports = (req, res, next) => {
     }
 
     if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
+      return next();
     }
 
     try {
@@ -42,7 +41,7 @@ module.exports = (req, res, next) => {
 
       req.file.filename = filename;
       req.file.path = filepath;
-
+      
       next();
     } catch (error) {
       res.status(500).json({ error });
