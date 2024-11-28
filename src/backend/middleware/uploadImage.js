@@ -45,7 +45,7 @@ module.exports = (req, res, next) => {
 
       next();
     } catch (error) {
-      res.status(500).json({ error: "Image processing failed" });
+      res.status(500).json({ error });
     }
   });
 };
