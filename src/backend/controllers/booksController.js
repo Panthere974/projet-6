@@ -35,24 +35,48 @@ exports.createBook = (req, res, next) => {
 
 exports.updateBook = (req, res, next) => {
     let imageUrl = null;
+
     if (req.file) {
-        imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+        imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
     } else {
-        imageUrl = req.body.imageUrl
+        imageUrl = req.body.imageUrl;
     }
-    Book.updateOne({ _id: req.params.id }, { ...req.body, imageUrl: imageUrl, _id: req.params.id })
-        .then(() => {
-            res.status(200).json({ message: 'Book updated successfully'})
+
+    Book.findOne({ _id: req.params.id })
+        .then(book => {
+            if (book.userId !== req.auth.userId) {
+                return res.status(403).json({ message: "Non Authorized User" });
+            }
+
+            Book.updateOne({ _id: req.params.id }, { ...req.body, imageUrl: imageUrl, _id: req.params.id })
+                .then(() => {
+                    res.status(200).json({ message: 'Book updated successfully'})
+                })
+                .catch(error => res.status(400).json({ error }));
         })
-        .catch(error => res.status(400).json({ error }));
-}
+        .catch(error => {
+            res.status(400).json({ error });
+        });
+};
+
 
 exports.deleteBook = (req, res, next) => {
-    Book.deleteOne({ _id: req.params.id })
-        .then(() => {
-            res.status(200).json({ message: 'Book deleted successfully'});
+    Book.findOne({ _id: req.params.id })
+        .then(book => {
+            if (book.userId !== req.auth.userId) {
+                return res.status(403).json({ message: "Non Authorized User" });
+            }
+
+            Book.deleteOne({ _id: req.params.id })
+                .then(() => {
+                    res.status(200).json({ message: 'Book deleted successfully'});
+                })
+                .catch(error => res.status(400).json({ error }));
         })
-        .catch(error => res.status(400).json({ error }));
+        .catch(error => {
+            res.status(400).json({ error });
+        });
+    
 }
 
 exports.addGrade = (req, res, next) => {
@@ -66,7 +90,7 @@ exports.addGrade = (req, res, next) => {
     
     Book.findOne({ _id: req.params.id })
         .then(book => {
-            if (book.ratings.find(rating => rating.userId === userId)) {
+            if (book.userId !== req.auth.userId || book.ratings.find(rating => rating.userId === userId)) {
                 res.status(400).json({ message: 'Grade already exist' });
                 return;
             }
