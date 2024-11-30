@@ -90,7 +90,7 @@ exports.addGrade = (req, res, next) => {
     
     Book.findOne({ _id: req.params.id })
         .then(book => {
-            if (book.userId !== req.auth.userId || book.ratings.find(rating => rating.userId === userId)) {
+            if (book.ratings.find(rating => rating.userId === userId)) {
                 res.status(400).json({ message: 'Grade already exist' });
                 return;
             }
